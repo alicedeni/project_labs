@@ -1,0 +1,55 @@
+@use './variables';
+@use "sass:color";
+
+.upload {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid variables.$color-border;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summary {
+  margin-top: 15px;
+  padding: 10px;
+  background: color.adjust(variables.$color-background, $lightness: 5%);
+  border-radius: 4px;
+}
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: variables.$color-background;
+  border: 2px dashed variables.$color-primary;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  max-width: 400px;
+  text-align: center;
+
+  &:hover {
+    background: color.adjust(variables.$color-background, $lightness: 10%);
+    border-color: variables.$color-hover;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  .file-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: variables.$color-primary-dark;
+    cursor: pointer;
+  }
+
+  .file-name {
+    font-size: 14px;
+    color: color.adjust(variables.$color-light-text, $lightness: -10%);
+  }
+}

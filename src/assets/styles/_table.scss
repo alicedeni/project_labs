@@ -1,0 +1,26 @@
+@use './variables';
+@use 'sass:color';
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+  th,
+  td {
+    border: 1px solid variables.$color-border;
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  th {
+    background-color: color.adjust(variables.$color-background, $lightness: -5%);
+  }
+}
+
+input[type='text'],
+input[type='number'] {
+  width: calc(100% - 10px);
+  padding: 0.5rem;
+  margin-right: .5rem;
+}

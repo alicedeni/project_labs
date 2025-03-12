@@ -1,0 +1,23 @@
+@use './variables';
+
+button {
+  background-color: variables.$color-primary;
+  color: variables.$button-text-color;
+  border-radius: 8px;
+  border: none;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s;
+  margin: 10px;
+
+  &:hover {
+    background-color: variables.$color-hover;
+    transform: translateY(-2px);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
