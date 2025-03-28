@@ -1,12 +1,13 @@
 $font-family: 'Play', system-ui, sans-serif;
 $color-black: rgba(0, 0, 0, 0.87);
-$color-primary: #b68d40;
-$color-primary-dark: #8c6b2d;
-$color-background: #f5efe6;
-$color-light-text: #5a4634;
-$color-border: #d4b886;
-$color-hover: #a47836;
+$color-primary: #7da7f5; // Светло-голубой
+$color-primary-dark: #5c85d6; // Средне-голубой
+$color-background: #e6f0f9; // Очень светлый голубой
+$color-light-text: #3a4564; // Темно-серый с синеватым оттенком
+$color-border: #a3c4f3; // Светло-голубой с серым подтоном
+$color-hover: #669ed9; // Нежный голубой
 $color-shadow: rgba(0, 0, 0, 0.1);
 $button-text-color: white;
 $modal-background: white;
+
 @use "sass:color";

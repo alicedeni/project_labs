@@ -2,20 +2,22 @@ import React, { useState } from 'react'
 import { API_CONFIG } from '../config'
 import Modal from './Modal'
 
-const ReportUpload = ({ onResultsReceived }) => {
+const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
   const [fileName, setFileName] = useState('')
+  const [isDragging, setIsDragging] = useState(false)
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0]
+  const handleFileUpload = async (file) => {
     if (!file) return
 
     setFileName(file.name)
 
     const formData = new FormData()
     formData.append('file', file)
+    formData.append('summary', JSON.stringify(summaryData))
+    formData.append('criteria', JSON.stringify(criteriaData))
 
     try {
       const response = await fetch(`${API_CONFIG.BASE_URL}/loading-report`, {
@@ -28,7 +30,15 @@ const ReportUpload = ({ onResultsReceived }) => {
       }
 
       const resultData = await response.json()
-      onResultsReceived(resultData)
+      const filteredResults =
+        resultData.results
+          ?.filter((item) => !item.criteria.includes('Итоговый балл'))
+          .map((item) => ({
+            ...item,
+            score: Math.max(item.score, 0), // Убедимся, что score не отрицательный
+          })) || []
+
+      onResultsReceived(filteredResults, resultData.author || 'Неизвестный автор')
 
       setIsSuccess(true)
       setModalMessage('Отчет успешно загружен и обработан!')
@@ -40,6 +50,36 @@ const ReportUpload = ({ onResultsReceived }) => {
     }
   }
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    handleFileUpload(file)
+  }
+
+  const handleDragEnter = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+    const file = e.dataTransfer.files[0]
+    handleFileUpload(file)
+  }
+
   const closeModal = () => {
     setModalVisible(false)
   }
@@ -48,11 +88,17 @@ const ReportUpload = ({ onResultsReceived }) => {
     <div className="upload">
       <h2>Загрузите отчет</h2>
 
-      <label className="file-upload">
+      <div
+        className={`file-upload ${isDragging ? 'dragging' : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
         <input type="file" accept=".doc,.docx,.pdf" onChange={handleFileChange} />
         <span className="file-label">📂 Нажмите или перетащите файл</span>
         {fileName && <span className="file-name">{fileName}</span>}
-      </label>
+      </div>
 
       <Modal
         visible={modalVisible}

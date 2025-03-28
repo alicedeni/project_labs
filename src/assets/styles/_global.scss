@@ -28,8 +28,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 10px variables.$color-shadow;
   padding: 30px;
-  width: 100%;
-  min-width: 1000px;
+  width: 1000px;
   text-align: center;
 }
 
@@ -37,4 +36,16 @@ h2 {
   font-size: 1.5rem;
   color: variables.$color-light-text;
   margin-bottom: 1.5rem;
+}
+
+
+@media (max-width: 768px) {
+  .main {
+    width: 450px;
+  }
+}
+@media (max-width: 460px) {
+  .main {
+    width: 300px;
+  }
 }

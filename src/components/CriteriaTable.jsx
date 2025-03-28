@@ -3,7 +3,7 @@ import { FaTrashAlt, FaPlus } from 'react-icons/fa'
 import { API_CONFIG } from '../config'
 import Modal from './Modal'
 
-const CriteriaTable = () => {
+const CriteriaTable = ({ onCriteriaSubmitted }) => {
   const [criteriaList, setCriteriaList] = useState([{ criteria: '', score: 0 }])
   const [modalVisible, setModalVisible] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
@@ -29,6 +29,7 @@ const CriteriaTable = () => {
       criteria: criteriaList.map((item) => item.criteria),
       score: criteriaList.map((item) => Number(item.score) || 0),
     }
+    onCriteriaSubmitted(criteriaData)
 
     try {
       const response = await fetch(`${API_CONFIG.BASE_URL}/criteria`, {
