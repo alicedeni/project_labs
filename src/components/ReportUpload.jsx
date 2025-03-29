@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { Rnd } from 'react-rnd'
+import mammoth from 'mammoth'
 import { API_CONFIG } from '../config'
 import Modal from './Modal'
 
@@ -8,9 +10,29 @@ const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [fileName, setFileName] = useState('')
   const [isDragging, setIsDragging] = useState(false)
+  const [previewVisible, setPreviewVisible] = useState(false)
+  const [filePreviewHtml, setFilePreviewHtml] = useState('')
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const handleFileUpload = async (file) => {
     if (!file) return
+
+    if (!isMobile) {
+      const arrayBuffer = await file.arrayBuffer()
+      const result = await mammoth.convertToHtml({ arrayBuffer })
+      setFilePreviewHtml(result.value)
+    }
 
     setFileName(file.name)
 
@@ -18,7 +40,6 @@ const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
     formData.append('file', file)
     formData.append('summary', JSON.stringify(summaryData))
     formData.append('criteria', JSON.stringify(criteriaData))
-
     try {
       const response = await fetch(`${API_CONFIG.BASE_URL}/loading-report`, {
         method: 'POST',
@@ -35,7 +56,7 @@ const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
           ?.filter((item) => !item.criteria.includes('Итоговый балл'))
           .map((item) => ({
             ...item,
-            score: Math.max(item.score, 0), // Убедимся, что score не отрицательный
+            score: Math.max(item.score, 0),
           })) || []
 
       onResultsReceived(filteredResults, resultData.author || 'Неизвестный автор')
@@ -84,6 +105,38 @@ const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
     setModalVisible(false)
   }
 
+  const PreviewModal = () => (
+    <Rnd
+      default={{
+        x: window.innerWidth / 2 - 200,
+        y: 50,
+        width: 400,
+        height: 600,
+      }}
+      minWidth={200}
+      minHeight={300}
+      bounds="window"
+      enableResizing={{
+        bottomRight: true,
+        bottomLeft: true,
+        topRight: true,
+        topLeft: true,
+      }}
+      className="preview-modal"
+    >
+      <div className="modal-content-docx">
+        <div className="modal-header">
+          <h4>{fileName}</h4>
+          <button className="close-button" onClick={() => setPreviewVisible(false)}>
+            ×
+          </button>
+        </div>
+
+        <div className="preview-area" dangerouslySetInnerHTML={{ __html: filePreviewHtml }} />
+      </div>
+    </Rnd>
+  )
+
   return (
     <div className="upload">
       <h2>Загрузите отчет</h2>
@@ -109,6 +162,14 @@ const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
           style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
         />
       </div>
+
+      {fileName && !isMobile && (
+        <button className="preview-button" onClick={() => setPreviewVisible(true)}>
+          Посмотреть отчет
+        </button>
+      )}
+
+      {previewVisible && <PreviewModal />}
 
       <Modal
         visible={modalVisible}
