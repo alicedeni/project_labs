@@ -1,5 +1,5 @@
 {
-  "name": "project_ii",
+  "name": "project_labs",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,14 +11,18 @@
   },
   "dependencies": {
     "@react-pdf/font": "^4.0.2",
+    "@react-pdf/renderer": "^4.3.0",
     "docx": "^9.3.0",
     "file-saver": "^2.0.5",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
+    "mammoth": "^1.9.0",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
+    "react-pdf": "^9.2.1",
+    "react-rnd": "^10.5.2",
     "sass-embedded": "^1.85.1"
   },
   "devDependencies": {

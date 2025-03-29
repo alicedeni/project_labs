@@ -43,7 +43,9 @@ const ManualUpload = ({ onSummaryReceived }) => {
   }, [])
 
   const handleFileChange = (e) => {
-    handleFile(e.target.files[0])
+    const file = e.target.files[0]
+    handleFile(file)
+    e.target.value = null
   }
 
   const handleDragEnter = (e) => {
@@ -114,14 +116,20 @@ const ManualUpload = ({ onSummaryReceived }) => {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
+        <label htmlFor="file-input" style={{ cursor: 'pointer' }}>
+          <span className="file-label">📂 Нажмите или перетащите файл</span>
+          <br />
+          {fileName && <span className="file-name">{fileName}</span>}
+        </label>
+
         <input
+          id="file-input"
           type="file"
           accept=".doc,.docx,.pdf"
           onChange={handleFileChange}
           disabled={isLoading}
+          style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
         />
-        <span className="file-label">📂 Нажмите или перетащите файл</span>
-        {fileName && <span className="file-name">{fileName}</span>}
       </div>
 
       {isLoading && <p>⏳ Идет обработка файла...</p>}
