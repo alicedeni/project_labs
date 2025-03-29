@@ -116,16 +116,16 @@ const ManualUpload = ({ onSummaryReceived }) => {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        <label htmlFor="file-input" style={{ cursor: 'pointer' }}>
+        <label htmlFor="manual-file-input" style={{ cursor: 'pointer' }}>
           <span className="file-label">📂 Нажмите или перетащите файл</span>
           <br />
           {fileName && <span className="file-name">{fileName}</span>}
         </label>
 
         <input
-          id="file-input"
+          id="manual-file-input"
           type="file"
-          accept=".doc,.docx,.pdf"
+          accept=".doc,.docx"
           onChange={handleFileChange}
           disabled={isLoading}
           style={{ opacity: 0, position: 'absolute', zIndex: -1 }}

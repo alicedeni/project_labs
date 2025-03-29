@@ -95,16 +95,16 @@ const ReportUpload = ({ onResultsReceived, summaryData, criteriaData }) => {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
-        <label htmlFor="file-input" style={{ cursor: 'pointer' }}>
+        <label htmlFor="report-file-input" style={{ cursor: 'pointer' }}>
           <span className="file-label">📂 Нажмите или перетащите файл</span>
           <br />
           {fileName && <span className="file-name">{fileName}</span>}
         </label>
 
         <input
-          id="file-input"
+          id="report-file-input"
           type="file"
-          accept=".doc,.docx,.pdf"
+          accept=".doc,.docx"
           onChange={handleFileChange}
           style={{ opacity: 0, position: 'absolute', zIndex: -1 }}
         />
